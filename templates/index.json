@@ -9,6 +9,33 @@
  */
 {
   "sections": {
+    "brand_story_B8nTiR": {
+      "type": "brand-story",
+      "name": "Brand Story",
+      "settings": {
+        "image": "shopify://shop_images/lwt-hmpg-outerwear-20251024_20.webp",
+        "title": "The Best Bangfor Your Buck",
+        "since_text": "Since 1996",
+        "description": "Legendary® makes the \"Original Deer Gear\"—gear that makes people feel like a legend without breaking the bank or what we like to call, the best bang for your buck!",
+        "button_text": "Read More",
+        "button_link": "shopify://pages/about-us"
+      }
+    },
+    "newsletter_xKTcqG": {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": {
+        "heading": "Sign Up for 15% Off Your First Order",
+        "subheading": "Be the first to know about new arrivals, exclusive offers, and future promotions.",
+        "email_placeholder": "Email address",
+        "show_phone": true,
+        "phone_placeholder": "Mobile Number (Optional)",
+        "button_text": "Sign Up",
+        "disclaimer": "Coupons are redeemed separately and cannot be combined. Discount excludes brand shop and may not be combined with other promotions.",
+        "privacy_text": "Privacy Policy & Terms",
+        "privacy_link": ""
+      }
+    },
     "hero_banner_de4ERp": {
       "type": "hero-banner",
       "name": "Hero Banner",
@@ -274,36 +301,10 @@
         "collection": "",
         "products_to_show": 8
       }
-    },
-    "brand_story_B8nTiR": {
-      "type": "brand-story",
-      "name": "Brand Story",
-      "settings": {
-        "image": "shopify://shop_images/lwt-hmpg-outerwear-20251024_20.webp",
-        "title": "The Best Bangfor Your Buck",
-        "since_text": "Since 1996",
-        "description": "Legendary® makes the \"Original Deer Gear\"—gear that makes people feel like a legend without breaking the bank or what we like to call, the best bang for your buck!",
-        "button_text": "Read More",
-        "button_link": "shopify://pages/about-us"
-      }
-    },
-    "newsletter_xKTcqG": {
-      "type": "newsletter",
-      "name": "Newsletter",
-      "settings": {
-        "heading": "Sign Up for 15% Off Your First Order",
-        "subheading": "Be the first to know about new arrivals, exclusive offers, and future promotions.",
-        "email_placeholder": "Email address",
-        "show_phone": true,
-        "phone_placeholder": "Mobile Number (Optional)",
-        "button_text": "Sign Up",
-        "disclaimer": "Coupons are redeemed separately and cannot be combined. Discount excludes brand shop and may not be combined with other promotions.",
-        "privacy_text": "Privacy Policy & Terms",
-        "privacy_link": ""
-      }
     }
   },
   "order": [
+    "brand_story_B8nTiR",
     "newsletter_xKTcqG",
     "hero_banner_de4ERp",
     "deal_cards_wmMipQ",
@@ -311,7 +312,6 @@
     "top_categories_iyWEXN",
     "category_banners_Rxq8Tn",
     "collections_carousel_UCz9Qa",
-    "featured_products_XeFtcc",
-    "brand_story_B8nTiR"
+    "featured_products_XeFtcc"
   ]
 }
