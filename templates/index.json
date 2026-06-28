@@ -1,4 +1,3 @@
-
 /*
  * ------------------------------------------------------------
  * IMPORTANT: The contents of this file are auto-generated.
@@ -287,9 +286,25 @@
         "button_text": "Read More",
         "button_link": "shopify://pages/about-us"
       }
+    },
+    "newsletter_xKTcqG": {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": {
+        "heading": "Sign Up for 15% Off Your First Order",
+        "subheading": "Be the first to know about new arrivals, exclusive offers, and future promotions.",
+        "email_placeholder": "Email address",
+        "show_phone": true,
+        "phone_placeholder": "Mobile Number (Optional)",
+        "button_text": "Sign Up",
+        "disclaimer": "Coupons are redeemed separately and cannot be combined. Discount excludes brand shop and may not be combined with other promotions.",
+        "privacy_text": "Privacy Policy & Terms",
+        "privacy_link": ""
+      }
     }
   },
   "order": [
+    "newsletter_xKTcqG",
     "hero_banner_de4ERp",
     "deal_cards_wmMipQ",
     "image_with_text_overlay_bHLegE",
