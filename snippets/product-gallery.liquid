@@ -1,0 +1,152 @@
+{%- comment -%}
+  Product Gallery Snippet
+  - Thumbnails on left
+  - Main image with discount badge
+  - Prev/Next navigation arrows
+{%- endcomment -%}
+
+<div class="product-gallery" id="ProductGallery" data-current-index="0">
+  <!-- Thumbnails -->
+  <div class="gallery-thumbnails">
+    {%- for image in product.images -%}
+      <button 
+        type="button"
+        class="thumbnail-btn{% if image == featured_image %} active{% endif %}"
+        data-thumbnail-index="{{ forloop.index0 }}"
+        data-image-id="{{ image.id }}"
+        aria-label="View image {{ forloop.index }}"
+      >
+        <img 
+          src="{{ image | image_url: width: 100 }}" 
+          alt="{{ image.alt | escape }}"
+          width="60"
+          height="75"
+          loading="lazy"
+        >
+      </button>
+    {%- endfor -%}
+  </div>
+
+  <!-- Main Image -->
+  <div class="gallery-main">
+    {%- if product.compare_at_price > product.price -%}
+      {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+      <span class="product-badge discount">{{ discount }}% Off</span>
+    {%- endif -%}
+
+    <div class="gallery-slider" id="GallerySlider">
+      {%- for image in product.images -%}
+        <div class="gallery-slide{% if image == featured_image %} active{% endif %}" data-slide-index="{{ forloop.index0 }}" data-image-id="{{ image.id }}">
+          <div class="image-zoom-container" data-zoom-image="{{ image | image_url: width: 1600 }}">
+            <img 
+              src="{{ image | image_url: width: 800 }}" 
+              alt="{{ image.alt | escape }}"
+              width="600"
+              height="700"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              class="zoom-image"
+            >
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button type="button" class="gallery-nav prev" id="GalleryPrev" aria-label="Previous image">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button type="button" class="gallery-nav next" id="GalleryNext" aria-label="Next image">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const gallery = document.getElementById('ProductGallery');
+  const thumbnails = document.querySelectorAll('.thumbnail-btn');
+  const slides = document.querySelectorAll('.gallery-slide');
+  const prevBtn = document.getElementById('GalleryPrev');
+  const nextBtn = document.getElementById('GalleryNext');
+  let currentIndex = 0;
+
+  function showSlide(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    currentIndex = index;
+    gallery.dataset.currentIndex = index;
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+    thumbnails.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === index);
+    });
+  }
+
+  function showSlideByImageId(imageId) {
+    const slide = document.querySelector(`.gallery-slide[data-image-id="${imageId}"]`);
+    if (slide) {
+      const index = parseInt(slide.dataset.slideIndex, 10);
+      showSlide(index);
+    }
+  }
+
+  // Expose functions globally for variant switching
+  window.ProductGallery = {
+    showSlide: showSlide,
+    showSlideByImageId: showSlideByImageId,
+    getCurrentIndex: () => currentIndex
+  };
+
+  thumbnails.forEach((thumb, i) => {
+    thumb.addEventListener('click', () => showSlide(i));
+  });
+
+  prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
+  nextBtn?.addEventListener('click', () => showSlide(currentIndex + 1));
+
+  // Image Zoom on Hover - zoom in and pan within container
+  const zoomContainers = document.querySelectorAll('.image-zoom-container');
+  const zoomScale = 2;
+
+  zoomContainers.forEach(container => {
+    const img = container.querySelector('.zoom-image');
+    const highResUrl = container.dataset.zoomImage;
+
+    // Preload high-res image
+    const preloadImg = new Image();
+    preloadImg.src = highResUrl;
+
+    container.addEventListener('mouseenter', () => {
+      container.classList.add('zooming');
+    });
+
+    container.addEventListener('mouseleave', () => {
+      container.classList.remove('zooming');
+      img.style.transform = '';
+      img.style.transformOrigin = '';
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      if (!container.classList.contains('zooming')) return;
+      
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Calculate percentage position for transform-origin
+      const xPercent = (x / rect.width) * 100;
+      const yPercent = (y / rect.height) * 100;
+      
+      // Apply zoom with transform-origin at mouse position
+      img.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+      img.style.transform = `scale(${zoomScale})`;
+    });
+  });
+})();
+</script>

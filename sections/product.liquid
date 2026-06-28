@@ -1,0 +1,145 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+<div class="product-page">
+  <!-- Breadcrumb -->
+  <nav class="product-breadcrumb" aria-label="Breadcrumb">
+    <ol class="breadcrumb-list">
+      {%- for collection in product.collections limit: 2 -%}
+        <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+      {%- endfor -%}
+      <li aria-current="page">{{ product.title }} (#{{ product.variants.first.sku | default: product.id }})</li>
+    </ol>
+  </nav>
+
+  <div class="product-container">
+    <!-- Gallery -->
+    {%- render 'product-gallery', product: product, featured_image: featured_image, current_variant: current_variant -%}
+
+    <!-- Product Info -->
+    {%- render 'product-info', product: product, current_variant: current_variant -%}
+  </div>
+
+  <!-- Trust Badges -->
+  {%- render 'trust-badges' -%}
+
+  <!-- Product Tabs -->
+  {%- render 'product-tabs', product: product -%}
+</div>
+
+<!-- Size Chart Modal -->
+<div class="size-chart-modal" id="SizeChartModal" aria-hidden="true">
+  <div class="size-chart-overlay" data-close-modal></div>
+  <div class="size-chart-content" role="dialog" aria-labelledby="SizeChartTitle">
+    <button type="button" class="size-chart-close" data-close-modal aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <h2 id="SizeChartTitle" class="size-chart-title">MEN'S CLOTHING</h2>
+    
+    <div class="size-chart-table-wrapper">
+      <table class="size-chart-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Neck</th>
+            <th>Chest</th>
+            <th>Waist</th>
+            <th>Sleeve</th>
+            <th>Shirt Length</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>SML</td><td>14-14½"</td><td>34-36"</td><td>28-30"</td><td>32-33"</td><td>30¾"</td></tr>
+          <tr><td>MED</td><td>15-15½"</td><td>38-40"</td><td>32-34"</td><td>33-34"</td><td>31"</td></tr>
+          <tr><td>LRG</td><td>16-16½"</td><td>42-44"</td><td>36-38"</td><td>34-35"</td><td>31½"</td></tr>
+          <tr><td>XL</td><td>17-17½"</td><td>46-48"</td><td>40-42"</td><td>35-36"</td><td>32¼"</td></tr>
+          <tr><td>2XL</td><td>18-18½"</td><td>50-52"</td><td>44-46"</td><td>36-37"</td><td>33"</td></tr>
+          <tr><td>3XL</td><td>19-19½"</td><td>54-56"</td><td>48-50"</td><td>37-38"</td><td>33¾"</td></tr>
+          <tr><td>4XL</td><td>20½-21"</td><td>58-60"</td><td>53-55"</td><td>38-38½"</td><td>34¼"</td></tr>
+          <tr><td>5XL</td><td>22-22½"</td><td>62-64"</td><td>58-60"</td><td>38½-39"</td><td>34¾"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="size-instructions">
+      <h3>Size Instructions</h3>
+      <ul>
+        <li><strong>Neck:</strong> Measure around the base of your neck, one to two fingers inserted for comfort.</li>
+        <li><strong>Chest:</strong> Measure around the fullest part of your chest, keeping the tape parallel to the floor.</li>
+        <li><strong>Waist:</strong> Bend to the side to find your natural waist. Measure keeping the tape slightly loose.</li>
+        <li><strong>Sleeve Length:</strong> Bend your elbow 90 degrees and place your hand on your hip. Start at the center back of your neck with a friend's help. Measure across your shoulder to your elbow and down to your wrist. Round up to the nearest half inch.</li>
+      </ul>
+    </div>
+
+    <div class="size-tall-info">
+      <h3>Men's Tall Apparel</h3>
+      <ul>
+        <li>The bigger the man, the bigger the legend—or so they say. Find all your Legendary favorites in the appropriate sizes for the man who's more than a legend.</li>
+        <li>Our tall sizing is designed for men over 6'2".</li>
+        <li>Big & tall ( +1½" Sleeve Length, +2" Body Length)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('SizeChartModal');
+  const openBtns = document.querySelectorAll('[data-open-size-chart]');
+  const closeBtns = modal.querySelectorAll('[data-close-modal]');
+
+  openBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "tag": "section",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Page"
+    }
+  ]
+}
+{% endschema %}

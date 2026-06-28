@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}{% unless page_title contains shop.name %} | {{ shop.name }}{% endunless %}</title>
+  <meta name="description" content="{{ page_description | escape }}">
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  {% style %}
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: {{ settings.color_primary }};
+      --light: {{ settings.color_light }};
+      --second-light: {{ settings.color_second_light }};
+      --dark: {{ settings.color_dark }};
+      --second-dark: {{ settings.color_second_dark }};
+      --grey: {{ settings.color_grey }};
+      --light-grey: {{ settings.color_light_grey }};
+    }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      color: var(--foreground);
+      background: var(--background);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; border: none; outline: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+  {% endstyle %}
+
+  {{ content_for_header }}
+
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+  </script>
+</head>
+<body class="template-{{ template.name }}">
+  <div class="mega-menu-backdrop" id="mega-backdrop"></div>
+
+  {% sections 'header-group' %}
+
+  <main id="MainContent" role="main">
+    {% render 'mini-cart' %}
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+</body>
+</html>

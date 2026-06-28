@@ -1,0 +1,277 @@
+{{ 'header.css' | asset_url | stylesheet_tag }}
+
+<header class="main-header">
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <!-- Logo -->
+      <a href="/" class="logo">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url}}" alt="{{ shop.name }}" class="logo-image" loading="eager">
+        {%- else -%}
+          <span class="logo-top">{{ section.settings.logo_text_top | default: 'Legendary' }}</span>
+          <span class="logo-bottom">{{ section.settings.logo_text_bottom | default: 'Whitetails' }}</span>
+        {%- endif -%}
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="desktop-nav" id="desktop-nav">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'mega_menu' -%}
+              <div class="desktop-nav-item" data-mega="{{ block.settings.handle }}" {{ block.shopify_attributes }}>
+                <a href="{{ block.settings.link | default: '#' }}"{% if block.settings.is_sale %} class="sale"{% endif %}>
+                  {{ block.settings.title }}
+                </a>
+                <div class="mega-menu{% if block.settings.is_sale %} mega-sale{% endif %}">
+                  {%- for i in (1..3) -%}
+                    {%- assign col_title = 'col_' | append: i | append: '_title' -%}
+                    {%- assign col_links = 'col_' | append: i | append: '_links' -%}
+                    {%- if block.settings[col_title] != blank -%}
+                      <div class="mega-menu-col">
+                        <h4>{{ block.settings[col_title] }}</h4>
+                        <ul>
+                          {%- assign links_array = block.settings[col_links] | split: '|' -%}
+                          {%- for link_item in links_array -%}
+                            {%- assign link_parts = link_item | split: '::' -%}
+                            <li><a href="{{ link_parts[1] | default: '#' }}">{{ link_parts[0] | strip }}</a></li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- if block.settings.is_sale and block.settings.sale_amount != blank -%}
+                    <div class="sale-highlight">
+                      <span class="big-text">{{ block.settings.sale_amount }}</span>
+                      <span class="small-text">{{ block.settings.sale_subtitle | default: '& Under Deals' }}</span>
+                      <a href="{{ block.settings.sale_link | default: '#' }}" class="shop-link">Shop All Deals</a>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.featured_image != blank -%}
+                    <div class="mega-menu-featured">
+                      <img src="{{ block.settings.featured_image | image_url: width: 400 }}" alt="{{ block.settings.featured_title }}" width="400" loading="lazy">
+                      <span class="feat-title">{{ block.settings.featured_title }}</span>
+                      <a href="{{ block.settings.featured_link | default: '#' }}" class="feat-link">
+                        {{ block.settings.featured_cta | default: 'Shop Now' }}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            {%- when 'nav_link' -%}
+              <div class="desktop-nav-item" {{ block.shopify_attributes }}>
+                <a href="{{ block.settings.link | default: '#' }}"{% if block.settings.is_sale %} class="sale"{% endif %}>
+                  {{ block.settings.title }}
+                </a>
+              </div>
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+
+      <!-- Nav Icons -->
+      <div class="nav-icons">
+        <a href="{{ routes.search_url }}" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </a>
+        <a href="{{ routes.account_url }}" aria-label="Account">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <button type="button" class="cart-btn" aria-label="Cart" data-cart-toggle>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="cart-count" style="{% if cart.item_count == 0 %}display: none;{% endif %}">{{ cart.item_count }}</span>
+        </button>
+        <button class="hamburger" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link | default: '#' }}"{% if block.settings.is_sale %} class="sale"{% endif %}>
+          {{ block.settings.title }}
+        </a>
+      {%- endfor -%}
+    </div>
+  </nav>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_text_top",
+      "label": "Logo text (top line)",
+      "default": "Legendary"
+    },
+    {
+      "type": "text",
+      "id": "logo_text_bottom",
+      "label": "Logo text (bottom line)",
+      "default": "Whitetails"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu",
+      "name": "Mega Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Menu title",
+          "default": "Men"
+        },
+        {
+          "type": "text",
+          "id": "handle",
+          "label": "Handle (unique id)",
+          "default": "men"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Menu link"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_sale",
+          "label": "Is sale menu?",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "col_1_title",
+          "label": "Column 1 title",
+          "default": "Tops"
+        },
+        {
+          "type": "textarea",
+          "id": "col_1_links",
+          "label": "Column 1 links (format: Label::URL | Label::URL)",
+          "default": "Flannels::#|T-Shirts::#|Henley Shirts::#|Casual Shirts::#|Sweatshirts::#|Hoodies::#"
+        },
+        {
+          "type": "header",
+          "content": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "col_2_title",
+          "label": "Column 2 title",
+          "default": "Outerwear"
+        },
+        {
+          "type": "textarea",
+          "id": "col_2_links",
+          "label": "Column 2 links",
+          "default": "Jackets::#|Vests::#|Shirt Jackets::#|Coats::#|Rain Gear::#"
+        },
+        {
+          "type": "header",
+          "content": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "col_3_title",
+          "label": "Column 3 title",
+          "default": "Bottoms"
+        },
+        {
+          "type": "textarea",
+          "id": "col_3_links",
+          "label": "Column 3 links",
+          "default": "Pants::#|Jeans::#|Shorts::#|Swim Trunks::#|Lounge Pants::#"
+        },
+        {
+          "type": "header",
+          "content": "Featured Card"
+        },
+        {
+          "type": "image_picker",
+          "id": "featured_image",
+          "label": "Featured image"
+        },
+        {
+          "type": "text",
+          "id": "featured_title",
+          "label": "Featured title",
+          "default": "New Arrivals"
+        },
+        {
+          "type": "text",
+          "id": "featured_cta",
+          "label": "Featured CTA text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "featured_link",
+          "label": "Featured link"
+        },
+        {
+          "type": "header",
+          "content": "Sale Highlight (if sale menu)"
+        },
+        {
+          "type": "text",
+          "id": "sale_amount",
+          "label": "Sale amount text",
+          "default": "$50"
+        },
+        {
+          "type": "text",
+          "id": "sale_subtitle",
+          "label": "Sale subtitle",
+          "default": "& Under Deals"
+        },
+        {
+          "type": "url",
+          "id": "sale_link",
+          "label": "Sale link"
+        }
+      ]
+    },
+    {
+      "type": "nav_link",
+      "name": "Navigation Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Link title",
+          "default": "Collections"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_sale",
+          "label": "Highlight as sale?",
+          "default": false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,302 @@
+
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_banner_de4ERp": {
+      "type": "hero-banner",
+      "name": "Hero Banner",
+      "settings": {
+        "image": "shopify://shop_images/home-banner-1.webp",
+        "subtitle": "Cold Snap. Hot Deals.",
+        "title": "DEALS $50 AND UNDER",
+        "button_text": "",
+        "button_link": ""
+      }
+    },
+    "deal_cards_wmMipQ": {
+      "type": "deal-cards",
+      "blocks": {
+        "deal_card_VMMbN9": {
+          "type": "deal_card",
+          "settings": {
+            "image": "shopify://shop_images/lwt-hmpg-coldfront-collections-20260226_03.webp",
+            "price_label": "Only",
+            "price": "$24.99",
+            "category": "Flannels & Shirts",
+            "footer_text": "Select styles",
+            "link": "shopify://collections/flannel-and-shirts"
+          }
+        },
+        "deal_card_b7eQFg": {
+          "type": "deal_card",
+          "settings": {
+            "price_label": "Only",
+            "price": "$24.99",
+            "category": "Sweatshirts & Fleece",
+            "footer_text": "Select styles",
+            "link": ""
+          }
+        },
+        "deal_card_3yJf7E": {
+          "type": "deal_card",
+          "settings": {
+            "price_label": "Only",
+            "price": "$24.99",
+            "category": "Pants",
+            "footer_text": "Select styles",
+            "link": ""
+          }
+        },
+        "deal_card_GFh4LC": {
+          "type": "deal_card",
+          "settings": {
+            "price_label": "Only",
+            "price": "$34.99",
+            "category": "Jackets & Vests",
+            "footer_text": "Select styles",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "deal_card_VMMbN9",
+        "deal_card_b7eQFg",
+        "deal_card_3yJf7E",
+        "deal_card_GFh4LC"
+      ],
+      "custom_css": [
+        ".deal-cards-wrapper {margin-top: -80px;}"
+      ],
+      "name": "Deal Cards",
+      "settings": {}
+    },
+    "image_with_text_overlay_bHLegE": {
+      "type": "image-with-text-overlay",
+      "name": "Image with Text Overlay",
+      "settings": {
+        "image": "shopify://shop_images/home-banner-2.webp",
+        "title": "$50 COAT CLEARANCE",
+        "subtitle": "Legendary's winter sale",
+        "button_text": "Shop Sale",
+        "button_link": "shopify://collections"
+      }
+    },
+    "top_categories_iyWEXN": {
+      "type": "top-categories",
+      "blocks": {
+        "category_LP9qAN": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/lwt-hmpg-coldfront-collections-20260226_03.webp",
+            "title": "Flannels and Shirts",
+            "link": "shopify://collections"
+          }
+        },
+        "category_pUD8tc": {
+          "type": "category",
+          "settings": {
+            "title": "Shirt Jackets",
+            "link": ""
+          }
+        },
+        "category_6MU99C": {
+          "type": "category",
+          "settings": {
+            "title": "Sweatshirts",
+            "link": ""
+          }
+        },
+        "category_tFdh7a": {
+          "type": "category",
+          "settings": {
+            "title": "Coats",
+            "link": ""
+          }
+        },
+        "category_YYReFC": {
+          "type": "category",
+          "settings": {
+            "title": "Vests",
+            "link": ""
+          }
+        },
+        "category_KHY9ra": {
+          "type": "category",
+          "settings": {
+            "title": "Casual Shirts",
+            "link": ""
+          }
+        },
+        "category_XxTQCK": {
+          "type": "category",
+          "settings": {
+            "title": "Pants & Swim",
+            "link": ""
+          }
+        },
+        "category_WMPwXW": {
+          "type": "category",
+          "settings": {
+            "title": "Women's",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_LP9qAN",
+        "category_pUD8tc",
+        "category_6MU99C",
+        "category_tFdh7a",
+        "category_YYReFC",
+        "category_KHY9ra",
+        "category_XxTQCK",
+        "category_WMPwXW"
+      ],
+      "name": "Top Categories",
+      "settings": {
+        "heading": "Top Categories"
+      }
+    },
+    "category_banners_Rxq8Tn": {
+      "type": "category-banners",
+      "blocks": {
+        "banner_ji9xab": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/lwt-hmpg-coldfront-20260226_11.webp",
+            "label": "MEN",
+            "link": "shopify://collections"
+          }
+        },
+        "banner_6fmk3E": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/lwt-hmpg-coldfront-20260226_12.jpg",
+            "label": "WOMEN",
+            "link": "shopify://collections"
+          }
+        },
+        "banner_7iphyB": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/lwt-hmpg-coldfront-20260226_13.webp",
+            "label": "CCW",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "banner_ji9xab",
+        "banner_6fmk3E",
+        "banner_7iphyB"
+      ],
+      "name": "Category Banners",
+      "settings": {}
+    },
+    "collections_carousel_UCz9Qa": {
+      "type": "collections-carousel",
+      "blocks": {
+        "collection_card_bn4B6K": {
+          "type": "collection_card",
+          "settings": {
+            "image": "shopify://shop_images/lwt-hmpg-hisandhers-20260128_15.jpg",
+            "title": "Buck Commander",
+            "subtitle": "For the love of the hunt",
+            "link": "shopify://collections"
+          }
+        },
+        "collection_card_txPkVL": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Tough As Buck",
+            "subtitle": "Honoring our hunting heritage",
+            "link": ""
+          }
+        },
+        "collection_card_69wLPF": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Journeymen",
+            "subtitle": "Engineered for performance",
+            "link": ""
+          }
+        },
+        "collection_card_EhtBpC": {
+          "type": "collection_card",
+          "settings": {
+            "title": "Gear & Accessories",
+            "subtitle": "Gear up for the season",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_bn4B6K",
+        "collection_card_txPkVL",
+        "collection_card_69wLPF",
+        "collection_card_EhtBpC"
+      ],
+      "name": "Collections Carousel",
+      "settings": {
+        "heading": "Legendary Collections"
+      }
+    },
+    "featured_products_XeFtcc": {
+      "type": "featured-products",
+      "blocks": {
+        "product_card_i3L7CL": {
+          "type": "product_card",
+          "settings": {
+            "product": "the-collection-snowboard-liquid"
+          }
+        },
+        "product_card_Erx9dG": {
+          "type": "product_card",
+          "settings": {
+            "product": "the-3p-fulfilled-snowboard"
+          }
+        }
+      },
+      "block_order": [
+        "product_card_i3L7CL",
+        "product_card_Erx9dG"
+      ],
+      "name": "Featured Products",
+      "settings": {
+        "heading": "Recommended for You",
+        "collection": "",
+        "products_to_show": 8
+      }
+    },
+    "brand_story_B8nTiR": {
+      "type": "brand-story",
+      "name": "Brand Story",
+      "settings": {
+        "image": "shopify://shop_images/lwt-hmpg-outerwear-20251024_20.webp",
+        "title": "The Best Bangfor Your Buck",
+        "since_text": "Since 1996",
+        "description": "Legendary® makes the \"Original Deer Gear\"—gear that makes people feel like a legend without breaking the bank or what we like to call, the best bang for your buck!",
+        "button_text": "Read More",
+        "button_link": "shopify://pages/about-us"
+      }
+    }
+  },
+  "order": [
+    "hero_banner_de4ERp",
+    "deal_cards_wmMipQ",
+    "image_with_text_overlay_bHLegE",
+    "top_categories_iyWEXN",
+    "category_banners_Rxq8Tn",
+    "collections_carousel_UCz9Qa",
+    "featured_products_XeFtcc",
+    "brand_story_B8nTiR"
+  ]
+}

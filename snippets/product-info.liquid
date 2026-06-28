@@ -1,0 +1,323 @@
+{%- comment -%}
+  Product Info Snippet
+  - Title, Price, Rating
+  - PayPal message
+  - Color swatches
+  - Size tabs (Regular / Big & Tall)
+  - Size buttons
+  - Promo banner
+  - Quantity + Add to Cart
+{%- endcomment -%}
+
+<div class="product-info" id="ProductInfo" data-product-url="{{ product.url }}.js">
+  <!-- Title -->
+  <h1 class="product-title">{{ product.title }}</h1>
+
+  <!-- Price & Rating Row -->
+  <div class="product-price-row">
+    <div class="product-price" id="ProductPrice" data-price-template="{{ product.price | money | json }}">
+      {%- if product.price_varies -%}
+        <span class="price-current">{{ product.selected_or_first_available_variant.price | money }}</span>
+        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+          <span class="price-compare">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      {%- else -%}
+        {%- if product.compare_at_price > product.price -%}
+          <span class="price-compare">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="price-current">{{ product.price | money }}</span>
+      {%- endif -%}
+    </div>
+    
+    <!-- Rating (Hardcoded for now) -->
+    <div class="product-rating">
+      <div class="rating-stars">
+        {%- for i in (1..5) -%}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="{% if i <= 4 %}#e85c2b{% else %}none{% endif %}" stroke="#e85c2b" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        {%- endfor -%}
+      </div>
+      <span class="rating-value">4.6</span>
+    </div>
+  </div>
+
+  <!-- PayPal Message -->
+  <div class="paypal-message">
+    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="16" viewBox="0 0 100 26">
+      <path fill="#003087" d="M12.5 4.5h-5c-.3 0-.6.3-.7.6l-2 13c0 .3.2.5.4.5h2.4c.3 0 .6-.3.7-.6l.5-3.5c0-.3.3-.6.7-.6h1.6c3.2 0 5-1.5 5.5-4.6.2-1.3 0-2.4-.6-3.1-.6-.8-1.8-1.2-3.5-1.2z"/>
+      <path fill="#0070E0" d="M38 4.5h-5c-.3 0-.6.3-.7.6l-2 13c0 .3.2.5.4.5h2.6c.2 0 .4-.2.5-.4l.6-3.7c0-.3.3-.6.7-.6h1.6c3.2 0 5-1.5 5.5-4.6.2-1.3 0-2.4-.6-3.1-.7-.8-1.9-1.2-3.6-1.2z"/>
+    </svg>
+    <span>Pay in 4 interest-free payments of {{ product.price | divided_by: 4 | money }}.</span>
+    <a href="#" class="learn-more">Learn more</a>
+  </div>
+
+  <!-- Product Form -->
+  {%- form 'product', product, id: 'ProductForm', class: 'product-form', data-product-form: '' -%}
+    
+    {%- for option in product.options_with_values -%}
+      {%- assign option_name_downcase = option.name | downcase -%}
+      
+      {%- if option_name_downcase == 'color' -%}
+        <!-- Color Swatches -->
+        <div class="product-option color-option">
+          <label class="option-label">
+            Colors: <span class="selected-value" data-option-selected="{{ option.name }}">{{ option.selected_value }}</span>
+          </label>
+          <div class="color-swatches">
+            {%- for value in option.values -%}
+              {%- assign color_handle = value | handleize -%}
+              <label class="color-swatch" title="{{ value }}">
+                <input 
+                  type="radio" 
+                  name="{{ option.name }}" 
+                  value="{{ value }}"
+                  {% if option.selected_value == value %}checked{% endif %}
+                  data-option-input
+                >
+                <span class="swatch-inner" style="background-color: {{ color_handle }};"></span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- elsif option_name_downcase == 'size' -%}
+        <!-- Size Option with Tabs -->
+        <div class="product-option size-option">
+          <div class="size-header">
+            <div class="size-tabs">
+              <button type="button" class="size-tab active" data-size-group="regular">Regular Sizes</button>
+              <button type="button" class="size-tab" data-size-group="big-tall">Big & Tall</button>
+            </div>
+            <button type="button" class="size-chart-link" data-open-size-chart>Size Chart</button>
+          </div>
+          
+          <div class="size-buttons">
+            {%- assign regular_sizes = 'SML,MED,LRG,XL,2XL' | split: ',' -%}
+            {%- assign big_tall_sizes = 'LT,XLT,2XLT,3XL,3XLT,4XL,4XLT,5XL' | split: ',' -%}
+            
+            {%- for value in option.values -%}
+              {%- assign is_regular = false -%}
+              {%- assign is_big_tall = false -%}
+              {%- for reg_size in regular_sizes -%}
+                {%- if value == reg_size -%}{%- assign is_regular = true -%}{%- endif -%}
+              {%- endfor -%}
+              {%- for bt_size in big_tall_sizes -%}
+                {%- if value == bt_size -%}{%- assign is_big_tall = true -%}{%- endif -%}
+              {%- endfor -%}
+              
+              {%- assign size_group = 'regular' -%}
+              {%- if is_big_tall -%}{%- assign size_group = 'big-tall' -%}{%- endif -%}
+              
+              <label class="size-btn" data-size-group="{{ size_group }}"{% if size_group == 'big-tall' %} style="display: none;"{% endif %}>
+                <input 
+                  type="radio" 
+                  name="{{ option.name }}" 
+                  value="{{ value }}"
+                  {% if option.selected_value == value %}checked{% endif %}
+                  data-option-input
+                >
+                <span class="size-label">{{ value }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- else -%}
+        <!-- Generic Option -->
+        <div class="product-option">
+          <label class="option-label">{{ option.name }}</label>
+          <select name="{{ option.name }}" class="option-select" data-option-input>
+            {%- for value in option.values -%}
+              <option value="{{ value }}" {% if option.selected_value == value %}selected{% endif %}>
+                {{ value }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <!-- Promo Banner -->
+    <div class="promo-banner">
+      <span>Save 25% with code: <strong>SPRING30</strong></span>
+    </div>
+
+    <!-- Quantity & Add to Cart -->
+    <div class="product-actions">
+      <div class="quantity-selector">
+        <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+        <input type="number" name="quantity" value="1" min="1" class="qty-input" id="Quantity">
+        <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+      </div>
+
+      <button 
+        type="submit" 
+        name="add" 
+        class="add-to-cart-btn"
+        id="AddToCartBtn"
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        <span class="add-to-cart-text">{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <input type="hidden" name="id" value="{{ current_variant.id }}" id="ProductVariantId">
+  {%- endform -%}
+</div>
+
+<script>
+(function() {
+  // Size tabs toggle
+  const sizeTabs = document.querySelectorAll('.size-tab');
+  const sizeButtons = document.querySelectorAll('.size-btn');
+
+  sizeTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const group = this.dataset.sizeGroup;
+      
+      sizeTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+
+      sizeButtons.forEach(btn => {
+        btn.style.display = btn.dataset.sizeGroup === group ? '' : 'none';
+      });
+    });
+  });
+
+  // Quantity buttons
+  const qtyInput = document.getElementById('Quantity');
+  const minusBtn = document.querySelector('.qty-btn.minus');
+  const plusBtn = document.querySelector('.qty-btn.plus');
+
+  minusBtn?.addEventListener('click', () => {
+    const val = parseInt(qtyInput.value) || 1;
+    if (val > 1) qtyInput.value = val - 1;
+  });
+
+  plusBtn?.addEventListener('click', () => {
+    const val = parseInt(qtyInput.value) || 1;
+    qtyInput.value = val + 1;
+  });
+
+  // Variant Data
+  const productVariants = {{ product.variants | json }};
+  const productOptions = {{ product.options_with_values | json }};
+  
+  const form = document.getElementById('ProductForm');
+  const optionInputs = form.querySelectorAll('[data-option-input]');
+  const variantIdInput = document.getElementById('ProductVariantId');
+  const priceContainer = document.getElementById('ProductPrice');
+  const addToCartBtn = document.getElementById('AddToCartBtn');
+  const addToCartText = addToCartBtn.querySelector('.add-to-cart-text');
+  
+  // Helper: Format money (simple version)
+  function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  // Get current selected options
+  function getSelectedOptions() {
+    const options = [];
+    productOptions.forEach((option, index) => {
+      const input = form.querySelector(`[name="${option.name}"]:checked`) || 
+                    form.querySelector(`[name="${option.name}"]`);
+      if (input) {
+        options[index] = input.value;
+      }
+    });
+    return options;
+  }
+
+  // Find variant by selected options
+  function findVariant(selectedOptions) {
+    return productVariants.find(variant => {
+      return variant.options.every((option, index) => option === selectedOptions[index]);
+    });
+  }
+
+  // Update UI when variant changes
+  function updateVariant(variant) {
+    if (!variant) {
+      // Variant not found / unavailable combination
+      addToCartBtn.disabled = true;
+      addToCartText.textContent = 'Unavailable';
+      return;
+    }
+
+    // Update variant ID
+    variantIdInput.value = variant.id;
+
+    // Update price
+    let priceHtml = `<span class="price-current">${formatMoney(variant.price)}</span>`;
+    if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+      priceHtml = `<span class="price-compare">${formatMoney(variant.compare_at_price)}</span>` + priceHtml;
+    }
+    priceContainer.innerHTML = priceHtml;
+
+    // Update availability
+    if (variant.available) {
+      addToCartBtn.disabled = false;
+      addToCartText.textContent = 'Add to Cart';
+    } else {
+      addToCartBtn.disabled = true;
+      addToCartText.textContent = 'Sold Out';
+    }
+
+    // Update gallery image if variant has featured_image
+    if (variant.featured_image && window.ProductGallery) {
+      window.ProductGallery.showSlideByImageId(variant.featured_image.id);
+    }
+
+    // Update URL without reload
+    const url = new URL(window.location.href);
+    url.searchParams.set('variant', variant.id);
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  // Update selected option labels
+  function updateOptionLabels() {
+    productOptions.forEach(option => {
+      const label = document.querySelector(`[data-option-selected="${option.name}"]`);
+      const input = form.querySelector(`[name="${option.name}"]:checked`) || 
+                    form.querySelector(`[name="${option.name}"]`);
+      if (label && input) {
+        label.textContent = input.value;
+      }
+    });
+  }
+
+  // Listen for option changes
+  optionInputs.forEach(input => {
+    input.addEventListener('change', function() {
+      updateOptionLabels();
+      const selectedOptions = getSelectedOptions();
+      const variant = findVariant(selectedOptions);
+      updateVariant(variant);
+    });
+  });
+
+  // Initialize with current variant from URL if exists
+  const urlParams = new URLSearchParams(window.location.search);
+  const variantParam = urlParams.get('variant');
+  if (variantParam) {
+    const initialVariant = productVariants.find(v => v.id === parseInt(variantParam, 10));
+    if (initialVariant) {
+      // Set initial options
+      initialVariant.options.forEach((optionValue, index) => {
+        const optionName = productOptions[index].name;
+        const input = form.querySelector(`[name="${optionName}"][value="${optionValue}"]`);
+        if (input) {
+          input.checked = true;
+        }
+      });
+      updateVariant(initialVariant);
+      updateOptionLabels();
+    }
+  }
+})();
+</script>

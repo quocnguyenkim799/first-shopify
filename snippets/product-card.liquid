@@ -1,0 +1,31 @@
+<a href="{{ product.url }}" class="product-card">
+  <div class="product-img-wrap">
+    {%- if product.featured_image != blank -%}
+      <img
+        src="{{ product.featured_image | image_url: width: 440 }}"
+        alt="{{ product.featured_image.alt | default: product.title }}"
+        width="440"
+        loading="lazy"
+      >
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag }}
+    {%- endif -%}
+  </div>
+  {%- if product.variants.size > 1 -%}
+    <div class="color-dots">
+      {%- for variant in product.variants limit: 8 -%}
+        {%- if variant.option1 != blank -%}
+          <span class="color-dot" style="background: {{ variant.option1 | handle | replace: '-', '' }};"></span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+  <p class="product-name">{{ product.title }}</p>
+  <p class="product-price">
+    {%- if product.price_varies -%}
+      {{ product.price_min | money }} - {{ product.price_max | money }}
+    {%- else -%}
+      {{ product.price | money }}
+    {%- endif -%}
+  </p>
+</a>

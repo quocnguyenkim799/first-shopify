@@ -1,0 +1,113 @@
+{{ 'deal-cards.css' | asset_url | stylesheet_tag }}
+
+<section class="deal-cards-wrapper">
+  <div class="deal-cards-grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link | default: '#' }}" class="deal-card" {{ block.shopify_attributes }}>
+        <div class="deal-card-header">
+          <span class="price-label">{{ block.settings.price_label | default: 'Only' }}</span>
+          <span class="price">{{ block.settings.price }}</span>
+          <span class="category">{{ block.settings.category }}</span>
+        </div>
+        <div class="deal-card-img-wrap">
+          {%- if block.settings.image != blank -%}
+            <img
+              class="deal-card-img"
+              src="{{ block.settings.image | image_url: width: 600 }}"
+              alt="{{ block.settings.category }}"
+              width="600"
+              loading="lazy"
+            >
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'deal-card-img' }}
+          {%- endif -%}
+        </div>
+        <div class="deal-card-footer">{{ block.settings.footer_text | default: 'Select styles' }}</div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Deal Cards",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "deal_card",
+      "name": "Deal Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image"
+        },
+        {
+          "type": "text",
+          "id": "price_label",
+          "label": "Price label",
+          "default": "Only"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "$24.99"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category name",
+          "default": "Flannels & Shirts"
+        },
+        {
+          "type": "text",
+          "id": "footer_text",
+          "label": "Footer text",
+          "default": "Select styles"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Deal Cards",
+      "blocks": [
+        {
+          "type": "deal_card",
+          "settings": {
+            "price": "$24.99",
+            "category": "Flannels & Shirts"
+          }
+        },
+        {
+          "type": "deal_card",
+          "settings": {
+            "price": "$24.99",
+            "category": "Sweatshirts & Fleece"
+          }
+        },
+        {
+          "type": "deal_card",
+          "settings": {
+            "price": "$24.99",
+            "category": "Pants"
+          }
+        },
+        {
+          "type": "deal_card",
+          "settings": {
+            "price": "$34.99",
+            "category": "Jackets & Vests"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

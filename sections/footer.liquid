@@ -1,0 +1,401 @@
+<footer class="site-footer">
+  <!-- Contact Bar -->
+  <div class="footer-contact">
+    <div class="footer-contact-inner">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'contact_item' -%}
+          <a href="{{ block.settings.url }}"  class="contact-item" {{ block.shopify_attributes }}>
+            <div class="contact-icon">
+              {%- if block.settings.icon == 'help' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              {%- elsif block.settings.icon == 'email' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+              {%- elsif block.settings.icon == 'phone' -%}
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              {%- endif -%}
+            </div>
+            <h3 class="contact-title">{{ block.settings.title }}</h3>
+            <p class="contact-desc">{{ block.settings.description }}</p>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <!-- Main Footer -->
+  <div class="footer-main">
+    <div class="footer-main-inner">
+      <!-- Logo + Social -->
+      <div class="footer-brand">
+        <div class="footer-logo">
+          {%- if section.settings.logo != blank -%}
+            <img
+              src="{{ section.settings.logo | image_url: width: 200 }}"
+              alt="{{ shop.name }}"
+              width="180"
+              loading="lazy"
+            >
+          {%- else -%}
+            <div class="footer-logo-text">
+              <span class="logo-top">{{ section.settings.logo_top | default: 'Legendary' }}</span>
+              <span class="logo-bottom">{{ section.settings.logo_bottom | default: 'Whitetails' }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+        <div class="footer-social">
+          {%- if section.settings.social_instagram != blank -%}
+            <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_facebook != blank -%}
+            <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_tiktok != blank -%}
+            <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78 2.92 2.92 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.57 6.33 6.33 0 0 0 9.37 22a6.33 6.33 0 0 0 6.37-6.22V9.07a8.16 8.16 0 0 0 3.85.97V6.69z"></path>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Link Columns -->
+      <div class="footer-links">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'link_column' -%}
+            <div class="footer-link-col" {{ block.shopify_attributes }}>
+              <h4>{{ block.settings.heading }}</h4>
+              {%- if block.settings.menu != blank -%}
+                <ul>
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                {%- comment -%} Fallback static links for preview {%- endcomment -%}
+                <ul>
+                  {%- for i in (1..4) -%}
+                    {%- assign link_key = 'link_' | append: i -%}
+                    {%- assign link_url_key = 'link_url_' | append: i -%}
+                    {%- if block.settings[link_key] != blank -%}
+                      <li><a href="{{ block.settings[link_url_key] | default: '#' }}">{{ block.settings[link_key] }}</a></li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-copyright">
+    <p>
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | upcase | default: 'LEGENDARY WHITETAILS' }}
+      {%- if section.settings.terms_url != blank %} / <a href="{{ section.settings.terms_url }}">TERMS &amp; CONDITIONS</a>{% endif -%}
+      {%- if section.settings.privacy_url != blank %} / <a href="{{ section.settings.privacy_url }}">PRIVACY POLICY</a>{% endif -%}
+    </p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_top",
+      "label": "Logo text (line 1)",
+      "default": "Legendary"
+    },
+    {
+      "type": "text",
+      "id": "logo_bottom",
+      "label": "Logo text (line 2)",
+      "default": "Whitetails"
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "Terms & Conditions URL"
+    },
+    {
+      "type": "url",
+      "id": "privacy_url",
+      "label": "Privacy Policy URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "contact_item",
+      "name": "Contact Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "help", "label": "Help / Clock" },
+            { "value": "email", "label": "Email" },
+            { "value": "phone", "label": "Phone" }
+          ],
+          "default": "help"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Help Center"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Find answers online anytime"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    },
+    {
+      "type": "link_column",
+      "name": "Link Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column heading",
+          "default": "Links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        },
+        {
+          "type": "text",
+          "id": "link_1",
+          "label": "Fallback link 1"
+        },
+        {
+          "type": "url",
+          "id": "link_url_1",
+          "label": "Fallback link 1 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_2",
+          "label": "Fallback link 2"
+        },
+        {
+          "type": "url",
+          "id": "link_url_2",
+          "label": "Fallback link 2 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_3",
+          "label": "Fallback link 3"
+        },
+        {
+          "type": "url",
+          "id": "link_url_3",
+          "label": "Fallback link 3 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_4",
+          "label": "Fallback link 4"
+        },
+        {
+          "type": "url",
+          "id": "link_url_4",
+          "label": "Fallback link 4 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_5",
+          "label": "Fallback link 5"
+        },
+        {
+          "type": "url",
+          "id": "link_url_5",
+          "label": "Fallback link 5 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_6",
+          "label": "Fallback link 6"
+        },
+        {
+          "type": "url",
+          "id": "link_url_6",
+          "label": "Fallback link 6 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_7",
+          "label": "Fallback link 7"
+        },
+        {
+          "type": "url",
+          "id": "link_url_7",
+          "label": "Fallback link 7 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_8",
+          "label": "Fallback link 8"
+        },
+        {
+          "type": "url",
+          "id": "link_url_8",
+          "label": "Fallback link 8 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_9",
+          "label": "Fallback link 9"
+        },
+        {
+          "type": "url",
+          "id": "link_url_9",
+          "label": "Fallback link 9 URL"
+        },
+        {
+          "type": "text",
+          "id": "link_10",
+          "label": "Fallback link 10"
+        },
+        {
+          "type": "url",
+          "id": "link_url_10",
+          "label": "Fallback link 10 URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        {
+          "type": "contact_item",
+          "settings": {
+            "icon": "help",
+            "title": "Help Center",
+            "description": "Find answers online anytime"
+          }
+        },
+        {
+          "type": "contact_item",
+          "settings": {
+            "icon": "email",
+            "title": "Email Us",
+            "description": "We respond as quickly as possible"
+          }
+        },
+        {
+          "type": "contact_item",
+          "settings": {
+            "icon": "phone",
+            "title": "1-800-875-9453",
+            "description": "Hours: Mon\u2013Fri, 8AM\u20134PM CT"
+          }
+        },
+        {
+          "type": "link_column",
+          "settings": {
+            "heading": "Customer Care",
+            "link_1": "Track Order Status",
+            "link_2": "Shipping Information",
+            "link_3": "Returns",
+            "link_4": "FAQs"
+          }
+        },
+        {
+          "type": "link_column",
+          "settings": {
+            "heading": "Shopping",
+            "link_1": "Size Chart",
+            "link_2": "E-Gift Cards",
+            "link_3": "All Deals"
+          }
+        },
+        {
+          "type": "link_column",
+          "settings": {
+            "heading": "Our Community",
+            "link_1": "Blog",
+            "link_2": "Recipes"
+          }
+        },
+        {
+          "type": "link_column",
+          "settings": {
+            "heading": "Company",
+            "link_1": "About Us",
+            "link_2": "Customer Reviews"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

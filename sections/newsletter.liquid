@@ -1,0 +1,109 @@
+<section class="newsletter">
+  <div class="newsletter-inner">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="sub">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    {%- form 'customer', id: 'newsletter-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="newsletter-form">
+        <input
+          type="email"
+          name="contact[email]"
+          placeholder="{{ section.settings.email_placeholder | default: 'Email address' }}"
+          required
+          autocomplete="email"
+          aria-label="Email address"
+        >
+        {% comment %} {%- if section.settings.show_phone -%}
+          <input
+            type="tel"
+            name="contact[phone]"
+            placeholder="{{ section.settings.phone_placeholder | default: 'Mobile Number (Optional)' }}"
+            aria-label="Mobile number"
+          >
+        {%- endif -%} {% endcomment %}
+        <button type="submit" class="btn-dark">
+          {{ section.settings.button_text | default: 'Sign Up' }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    {%- endform -%}
+
+    {%- if section.settings.disclaimer != blank -%}
+      <p class="newsletter-disclaimer">{{ section.settings.disclaimer }}</p>
+    {%- endif -%}
+    {%- if section.settings.privacy_text != blank -%}
+      <a href="{{ section.settings.privacy_link | default: '#' }}" class="newsletter-link">{{ section.settings.privacy_text }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Sign Up for 15% Off Your First Order"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Be the first to know about new arrivals, exclusive offers, and future promotions."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Email address"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show phone field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "phone_placeholder",
+      "label": "Phone placeholder",
+      "default": "Mobile Number (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Sign Up"
+    },
+    {
+      "type": "textarea",
+      "id": "disclaimer",
+      "label": "Disclaimer text",
+      "default": "Coupons are redeemed separately and cannot be combined. Discount excludes brand shop and may not be combined with other promotions."
+    },
+    {
+      "type": "text",
+      "id": "privacy_text",
+      "label": "Privacy link text",
+      "default": "Privacy Policy & Terms"
+    },
+    {
+      "type": "url",
+      "id": "privacy_link",
+      "label": "Privacy link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

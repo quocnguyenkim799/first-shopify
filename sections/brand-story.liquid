@@ -1,0 +1,75 @@
+<section class="best-bang">
+  {%- if section.settings.image != blank -%}
+    <img
+      class="best-bang-img"
+      src="{{ section.settings.image | image_url: width: 1700 }}"
+      alt="{{ section.settings.title }}"
+      width="1700"
+      loading="lazy"
+    >
+  {%- else -%}
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'best-bang-img' }}
+  {%- endif -%}
+  <div class="best-bang-overlay"></div>
+  <div class="best-bang-content">
+    {%- if section.settings.title != blank -%}
+      <h2>{{ section.settings.title }}</h2>
+    {%- endif -%}
+    {%- if section.settings.since_text != blank -%}
+      <p class="since">{{ section.settings.since_text }}</p>
+    {%- endif -%}
+    {%- if section.settings.description != blank -%}
+      <p class="desc">{{ section.settings.description }}</p>
+    {%- endif -%}
+    {%- if section.settings.button_text != blank -%}
+      <a href="{{ section.settings.button_link | default: '#' }}" class="btn-outline">{{ section.settings.button_text }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "The Best Bang<br>for Your Buck"
+    },
+    {
+      "type": "text",
+      "id": "since_text",
+      "label": "Since text",
+      "default": "Since 1996"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Legendary® makes the \"Original Deer Gear\"—gear that makes people feel like a legend without breaking the bank or what we like to call, the best bang for your buck!"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Read More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story"
+    }
+  ]
+}
+{% endschema %}

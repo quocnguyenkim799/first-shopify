@@ -1,0 +1,490 @@
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+
+<div class="collection-page">
+  <div class="collection-container">
+    
+    {%- if section.settings.show_filters -%}
+    <!-- Filter Sidebar -->
+    <aside class="filter-sidebar" id="filterSidebar">
+      <div class="filter-header">
+        <h2 class="filter-title">Filters</h2>
+        <a href="{{ collection.url }}" class="filter-clear">Clear All</a>
+      </div>
+
+      <form id="CollectionFiltersForm" class="filter-form">
+        {%- for filter in collection.filters -%}
+          <details class="filter-group" open>
+            <summary class="filter-group-header">
+              <span>{{ filter.label }}</span>
+              <svg class="filter-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </summary>
+            
+            <div class="filter-group-content">
+              {%- case filter.type -%}
+              
+                {%- when 'list' -%}
+                  {%- if filter.param_name contains 'option.color' or filter.label == 'Color' -%}
+                    <!-- Color Swatches -->
+                    <div class="filter-colors">
+                      {%- for value in filter.values -%}
+                        <label class="filter-color-swatch {% if value.active %}active{% endif %}" title="{{ value.label }}">
+                          <input 
+                            type="checkbox" 
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            onchange="this.form.submit()"
+                          >
+                          <span class="color-swatch" style="background-color: {{ value.value | handleize | replace: '-', '' }};" data-color="{{ value.label | downcase }}"></span>
+                          <span class="color-label">{{ value.label }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  
+                  {%- elsif filter.param_name contains 'option.size' or filter.label == 'Size' -%}
+                    <!-- Size Buttons -->
+                    <div class="filter-sizes">
+                      {%- for value in filter.values -%}
+                        <label class="filter-size-btn {% if value.active %}active{% endif %}">
+                          <input 
+                            type="checkbox" 
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            onchange="this.form.submit()"
+                          >
+                          <span>{{ value.label }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  
+                  {%- else -%}
+                    <!-- Checkbox List (for Material, Category, etc.) -->
+                    <ul class="filter-checkbox-list">
+                      {%- for value in filter.values -%}
+                        <li>
+                          <label class="filter-checkbox {% if value.active %}active{% endif %}">
+                            <input 
+                              type="checkbox" 
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              {% if value.active %}checked{% endif %}
+                              onchange="this.form.submit()"
+                            >
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">{{ value.label }}</span>
+                            <span class="checkbox-count">({{ value.count }})</span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                
+                {%- when 'price_range' -%}
+                  <!-- Price Range -->
+                  <div class="filter-price">
+                    <div class="price-inputs">
+                      <div class="price-field">
+                        <span class="price-currency">{{ cart.currency.symbol }}</span>
+                        <input 
+                          type="number" 
+                          name="{{ filter.min_value.param_name }}"
+                          id="Filter-{{ filter.label | handleize }}-GTE"
+                          min="0"
+                          max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                          {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                          placeholder="0"
+                        >
+                      </div>
+                      <span class="price-separator">to</span>
+                      <div class="price-field">
+                        <span class="price-currency">{{ cart.currency.symbol }}</span>
+                        <input 
+                          type="number" 
+                          name="{{ filter.max_value.param_name }}"
+                          id="Filter-{{ filter.label | handleize }}-LTE"
+                          min="0"
+                          max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                          {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                          placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        >
+                      </div>
+                    </div>
+                    <!-- Price Radio Options -->
+                    <div class="price-radio-list">
+                      {%- assign price_ranges = '10-25,25-50,50-75,75-100' | split: ',' -%}
+                      {%- for range in price_ranges -%}
+                        {%- assign prices = range | split: '-' -%}
+                        <label class="filter-radio">
+                          <input 
+                            type="radio" 
+                            name="price_range_radio"
+                            value="{{ range }}"
+                            onchange="setPriceRange({{ prices[0] }}, {{ prices[1] }})"
+                          >
+                          <span class="radio-custom"></span>
+                          <span class="radio-label">${{ prices[0] }} - ${{ prices[1] }}</span>
+                        </label>
+                      {%- endfor -%}
+                      <label class="filter-radio">
+                        <input 
+                          type="radio" 
+                          name="price_range_radio"
+                          value="100-more"
+                          onchange="setPriceRange(100, '')"
+                        >
+                        <span class="radio-custom"></span>
+                        <span class="radio-label">$100 or More</span>
+                      </label>
+                    </div>
+                  </div>
+                
+              {%- endcase -%}
+            </div>
+          </details>
+        {%- endfor -%}
+        
+        <noscript>
+          <button type="submit" class="filter-submit-btn">Apply Filters</button>
+        </noscript>
+      </form>
+    </aside>
+    {%- endif -%}
+
+    <!-- Product Grid Area -->
+    <div class="collection-main">
+      <!-- Sort & Results Header -->
+      <div class="collection-header">
+        <div class="collection-results">
+          <span>{{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}</span>
+        </div>
+        
+        {%- if section.settings.show_sort -%}
+        <div class="collection-sort">
+          <label for="SortBy">Sort by</label>
+          <select name="sort_by" id="SortBy" class="sort-select" onchange="window.location.href = '{{ collection.url }}?sort_by=' + this.value">
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+                {{ option.name }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Active Filters Tags -->
+      {%- if collection.filters != empty -%}
+        {%- assign has_active_filters = false -%}
+        {%- for filter in collection.filters -%}
+          {%- if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value -%}
+            {%- assign has_active_filters = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        
+        {%- if has_active_filters -%}
+        <div class="active-filters">
+          {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <a href="{{ value.url_to_remove }}" class="active-filter-tag">
+                {{ value.label }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </a>
+            {%- endfor -%}
+            {%- if filter.min_value.value or filter.max_value.value -%}
+              <a href="{{ filter.url_to_remove }}" class="active-filter-tag">
+                {{ cart.currency.symbol }}{{ filter.min_value.value | default: 0 | money_without_currency }} - {{ cart.currency.symbol }}{{ filter.max_value.value | money_without_currency }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      <!-- Product Grid -->
+      <div class="product-grid" id="ProductGrid" style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: {{ section.settings.columns_mobile }};">
+        {%- paginate collection.products by section.settings.products_per_page -%}
+          {%- for product in collection.products -%}
+            <div class="product-card">
+              <a href="{{ product.url }}" class="product-card-link">
+                <!-- Product Image -->
+                <div class="product-card-image">
+                  {%- if product.compare_at_price > product.price -%}
+                    {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+                    <span class="product-badge sale">{{ discount }}% Off</span>
+                  {%- endif -%}
+                  
+                  {%- if product.featured_media -%}
+                    <img 
+                      src="{{ product.featured_media | image_url: width: 400 }}"
+                      alt="{{ product.featured_media.alt | escape }}"
+                      loading="lazy"
+                      width="400"
+                      height="{{ 400 | divided_by: product.featured_media.aspect_ratio | round }}"
+                    >
+                    {%- if product.media[1] != blank and section.settings.show_secondary_image -%}
+                      <img 
+                        class="product-card-image-secondary"
+                        src="{{ product.media[1] | image_url: width: 400 }}"
+                        alt="{{ product.media[1].alt | escape }}"
+                        loading="lazy"
+                        width="400"
+                        height="{{ 400 | divided_by: product.media[1].aspect_ratio | round }}"
+                      >
+                    {%- endif -%}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                </div>
+              </a>
+
+              <!-- Color Swatches -->
+              {%- if section.settings.enable_color_swatches -%}
+                {%- assign color_option = product.options_by_name['Color'] -%}
+                {%- if color_option -%}
+                  <div class="product-card-swatches">
+                    {%- assign swatch_count = 0 -%}
+                    {%- assign max_swatches = 6 -%}
+                    {%- for value in color_option.values -%}
+                      {%- if swatch_count < max_swatches -%}
+                        <span 
+                          class="product-swatch" 
+                          style="background-color: {{ value | handleize | replace: '-', '' }};"
+                          title="{{ value }}"
+                          data-color="{{ value | downcase }}"
+                        ></span>
+                        {%- assign swatch_count = swatch_count | plus: 1 -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- if color_option.values.size > max_swatches -%}
+                      <span class="product-swatch-more">+{{ color_option.values.size | minus: max_swatches }} Colors</span>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+
+              <!-- Product Info -->
+              <div class="product-card-info">
+                <h3 class="product-card-title">
+                  <a href="{{ product.url }}">{{ product.title }}</a>
+                </h3>
+                <div class="product-card-price">
+                  {%- if product.price_varies -%}
+                    <span class="price">{{ product.price_min | money }} - {{ product.price_max | money }}</span>
+                  {%- else -%}
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="price sale">{{ product.price | money }}</span>
+                      <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                    {%- else -%}
+                      <span class="price">{{ product.price | money }}</span>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- else -%}
+            <div class="collection-empty">
+              <p>No products found matching your filters.</p>
+              <a href="{{ collection.url }}" class="btn">Clear all filters</a>
+            </div>
+          {%- endfor -%}
+
+          <!-- Load More Button -->
+          {%- if paginate.next -%}
+            <div class="load-more-container">
+              <p class="load-more-count">
+                Showing {{ paginate.current_offset | plus: collection.products.size }} of {{ collection.products_count }} products
+              </p>
+              <button 
+                type="button" 
+                class="load-more-btn"
+                id="LoadMoreBtn"
+                data-next-url="{{ paginate.next.url }}"
+              >
+                <span class="load-more-text">Load More</span>
+                <span class="load-more-spinner" style="display: none;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinner-icon">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          {%- else -%}
+            {%- if collection.products_count > 0 -%}
+              <div class="load-more-container">
+                <p class="load-more-count">Showing all {{ collection.products_count }} products</p>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Filter Toggle -->
+<button class="filter-toggle-mobile" id="filterToggle" aria-label="Open filters">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+  </svg>
+  Filters
+</button>
+
+<script>
+  // Price range helper
+  function setPriceRange(min, max) {
+    const form = document.getElementById('CollectionFiltersForm');
+    const minInput = form.querySelector('[id*="-GTE"]');
+    const maxInput = form.querySelector('[id*="-LTE"]');
+    if (minInput) minInput.value = min;
+    if (maxInput) maxInput.value = max || '';
+    form.submit();
+  }
+
+  // Mobile filter toggle
+  document.getElementById('filterToggle')?.addEventListener('click', function() {
+    document.getElementById('filterSidebar')?.classList.toggle('open');
+    document.body.classList.toggle('filter-open');
+  });
+
+  // Close filter on overlay click
+  document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('filterSidebar');
+    const toggle = document.getElementById('filterToggle');
+    if (sidebar?.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+      document.body.classList.remove('filter-open');
+    }
+  });
+
+  // Load More functionality
+  (function() {
+    const loadMoreBtn = document.getElementById('LoadMoreBtn');
+    if (!loadMoreBtn) return;
+
+    loadMoreBtn.addEventListener('click', async function() {
+      const nextUrl = this.dataset.nextUrl;
+      if (!nextUrl) return;
+
+      const textEl = this.querySelector('.load-more-text');
+      const spinnerEl = this.querySelector('.load-more-spinner');
+      
+      // Show loading state
+      textEl.style.display = 'none';
+      spinnerEl.style.display = 'inline-flex';
+      this.disabled = true;
+
+      try {
+        const response = await fetch(nextUrl);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Get new products
+        const newProducts = doc.querySelectorAll('#ProductGrid .product-card');
+        const productGrid = document.getElementById('ProductGrid');
+        
+        // Remove the load more container before appending new products
+        const currentLoadMore = productGrid.querySelector('.load-more-container');
+        if (currentLoadMore) currentLoadMore.remove();
+        
+        // Append new products
+        newProducts.forEach(product => {
+          productGrid.appendChild(product.cloneNode(true));
+        });
+        
+        // Get and append new load more container (if exists)
+        const newLoadMore = doc.querySelector('.load-more-container');
+        if (newLoadMore) {
+          productGrid.appendChild(newLoadMore.cloneNode(true));
+          // Re-attach event listener to new button
+          const newBtn = productGrid.querySelector('#LoadMoreBtn');
+          if (newBtn) {
+            newBtn.addEventListener('click', arguments.callee.bind(newBtn));
+          }
+        }
+        
+        // Update URL without reload
+        history.pushState({}, '', nextUrl);
+        
+      } catch (error) {
+        console.error('Load more failed:', error);
+        textEl.textContent = 'Error - Try Again';
+        textEl.style.display = 'inline';
+        spinnerEl.style.display = 'none';
+        this.disabled = false;
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection Page",
+  "tag": "section",
+  "class": "section-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 3,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Columns on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "default": true,
+      "label": "Show filters"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "default": true,
+      "label": "Show sort dropdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "default": true,
+      "label": "Show color swatches on products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "Show second image on hover"
+    }
+  ]
+}
+{% endschema %}

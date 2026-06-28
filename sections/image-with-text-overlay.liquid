@@ -1,0 +1,71 @@
+<section class="image-with-text-overlay">
+  <div class="image-with-text-overlay__inner">
+    {%- if section.settings.image != blank -%}
+      <img
+        class="image-with-text-overlay__img"
+        src="{{ section.settings.image | image_url: width: 1280 }}"
+        alt="{{ section.settings.title }}"
+        width="1280"
+        loading="lazy"
+      >
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'image-with-text-overlay__img' }}
+    {%- endif -%}
+    {% comment %} <div class="image-with-text-overlay__overlay"></div> {% endcomment %}
+    <div class="image-with-text-overlay__content">
+      {%- if section.settings.title != blank -%}
+        <h2>{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p>{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_text != blank -%}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="btn-primary">
+          {{ section.settings.button_text }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with Text Overlay",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "$50 COAT CLEARANCE"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle text",
+      "default": "Legendary's winter sale"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with Text Overlay"
+    }
+  ]
+}
+{% endschema %}
